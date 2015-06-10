@@ -1,6 +1,6 @@
 #  Need to run this with SUDO to work...
 PULSES=1
-stdbuf -oL ../hidapi/hidapi/linux/hidtest-hidraw |
+stdbuf -oL ../hidapi/hidapi/linux/btcmd |
 while IFS= read -r VALUE
 do
 
