@@ -1,7 +1,8 @@
 #  Need to run this with SUDO to work...
 PULSES=1
-stdbuf -oL ../hidapi/hidapi/linux/btcmd |
-while IFS= read -r VALUE
+HIDPATH="/dev/hidraw0"
+stdbuf -oL ../hidapi/hidapi/linux/btcmd $HIDPATH |
+while IFR= read -r VALUE
 do
 
 #echo $VALUE
