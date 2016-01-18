@@ -40,6 +40,7 @@
 bool verbose=false;
 char path[255] = "/dev/hidraw0";
 bool enumerate=false;
+bool numeric=false;
 
 void showHelp()
 {
@@ -48,6 +49,7 @@ void showHelp()
         printf("Options: \n");
 	printf("-v, --verbose    :   Full-frame data display\n");
 	printf("-e, --enumerate  :   Search for and enumerate all BT devices\n");
+	printf("-n, --numeric    :   Output character ascii values (non-char)\n");
 	printf("[path] defaults to /dev/hidraw0.  \n");
 	exit(1);
 }
@@ -57,17 +59,21 @@ void parseArgs(int argc, char *argv[])
 	for (int i = 0; i < argc; i++)
 	{
 		char *arg = argv[i];
-		if (strcmp(arg, "-v")==0){
-			verbose=true; continue;
-		}
-		if (strcmp(arg, "-e")==0 ||
-		    strcmp(arg,"--enumerate")==0) {
-			enumerate=true;
-			continue;
+        if (strcmp(arg, "-v")==0){
+            verbose=true; continue;
+        }
+        if (strcmp(arg, "-e")==0 ||
+            strcmp(arg,"--enumerate")==0) {
+            enumerate=true;
+            continue;
 		}
 		if (strcmp(arg, "--help")==0 ||
-		    strcmp(arg, "-h")==0 ) {
-			showHelp();
+            strcmp(arg, "-h")==0 ) {
+            showHelp();
+		}
+		if (strcmp(arg, "--numeric")==0 || strcmp(arg, "-n")==0)
+		{
+		    numeric=true;
 		}
 		if (i == (argc-1)) sprintf(path,"%s",arg);
 	}
@@ -167,7 +173,7 @@ int main(int argc, char* argv[])
 		usleep(20*1000);
 		#endif
 
-                if ( res > 0) {
+        if ( res > 0) {
 			if ( verbose ) {
 				printf("Length=%d\n", res);
 				for (i = 0; i < res; i++) {
@@ -179,7 +185,11 @@ int main(int argc, char* argv[])
 				}
 				printf("\n");
 			} else {
-				if ( res >= 4 ) printf("%d\n", buf[3]);
+				if ( res >= 4 )
+				{
+				    if (numeric) printf("%d\n", buf[3]);
+				    else printf("%c\n", buf[3]);
+				}
 			}
 		}
 	}

@@ -10,9 +10,11 @@ gpio utility  (Software PWM code for controlling servo motors from cmd line)
 btc.sh script (Bluetooth controller shell script)
 
 Build instructions:
+
 =================================================
 btcmd 
 
+0.  sudo apt-get install libusb-1.0 libudev-dev (needed by hidapi??)
 1.  Download the hidapi package from github:
   
 https://github.com/signal11/hidapi

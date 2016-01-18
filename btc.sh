@@ -1,58 +1,71 @@
 #  Need to run this with SUDO to work...
 PULSES=1
 HIDPATH="/dev/hidraw0"
-stdbuf -oL ../hidapi/hidapi/linux/btcmd $HIDPATH |
+
+stdbuf -oL btcmd --numeric $HIDPATH |
 while IFR= read -r VALUE
 do
 
-#echo $VALUE
+echo $VALUE
+CHAR=" "
 
 # LEFT
 if [ $VALUE -eq 4 ]
 then
-  gpio_pwm 20 10000 $PULSES 25 &
+#  let CHAR="a"
+  echo "1"
 fi
 # RIGHT
 if [ $VALUE -eq 7 ]
 then
-  gpio_pwm 20 10000 $PULSES 5 &
+#  let CHAR="d"
+  echo "1"
 fi
 # UP
 if [ $VALUE -eq 26 ]
 then
-  gpio_pwm 21 10000 $PULSES 25 &
+#  let CHAR="w"
+  echo "1"
 fi
 # DOWN
 if [ $VALUE -eq 27 ]
 then
-  gpio_pwm 21 10000 $PULSES 5 &
+#  let CHAR="x"
+  echo "1"
 fi
 
 # Start -> go to neutral
 if [ $VALUE -eq 24 ]
 then
-  gpio_pwm 20 10000 25 15 &
-  gpio_pwm 21 10000 25 14 &
+#  let CHAR="s"
+  echo "1"
 fi
 
 # LeftBumper -> Go full
 if [ $VALUE -eq 11 ]
 then
-  gpio_pwm 20 10000 35 5 &
-  gpio_pwm 21 10000 35 5 &
+#  let CHAR="q"
+  echo "1"
 fi
 
 # RightBumper -> Go full
 if [ $VALUE -eq 13 ]
 then
-  gpio_pwm 20 10000 35 25 &
-  gpio_pwm 21 10000 35 25 &
+#  let CHAR="e"
+  echo "1"
+fi
+
+#BtmRight btn -> do a dance
+if [ $VALUE -eq 15 ]
+then
+#  let CHAR="0"
+  echo "1"
 fi
 
 # UpperLeft btn -> Low-Hi
 if [ $VALUE -eq 12 ]
 then
-  PULSES=15
+  PULSES=5
   echo Speed=$PULSES
 fi
 
@@ -65,30 +78,10 @@ fi
 
 if [ $VALUE -eq 18 ]
 then
-  PULSES=30
+  PULSES=15
   echo Speed=$PULSES
 fi
 
-#BtmRight btn -> do a dance
-if [ $VALUE -eq 15 ]
-then
-  gpio_pwm 20 10000 15 15 &
-  gpio_pwm 21 10000 15 14
-  gpio_pwm 20 10000 35 25 &
-  gpio_pwm 21 10000 35 25
-  gpio_pwm 20 10000 35 5 &
-  gpio_pwm 21 10000 35 5
-  gpio_pwm 20 10000 35 25 &
-  gpio_pwm 21 10000 35 25
-  gpio_pwm 20 10000 35 5 &
-  gpio_pwm 21 10000 35 5
-  gpio_pwm 20 10000 35 25 &
-  gpio_pwm 21 10000 35 25
-  gpio_pwm 20 10000 35 5 &
-  gpio_pwm 21 10000 35 5
-  gpio_pwm 20 10000 20 15 &
-  gpio_pwm 21 10000 20 14
-fi
-
+./motorControl.sh $CHAR $PULSES
 
 done

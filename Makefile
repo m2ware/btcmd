@@ -29,6 +29,7 @@ LIBS_UDEV = `pkg-config libudev --libs` -lrt
 LIBS      = $(LIBS_UDEV)
 INCLUDES ?= -I../hidapi `pkg-config libusb-1.0 --cflags`
 
+all: btcmd install
 
 # Console Test Program
 btcmd: $(COBJS) $(CPPOBJS)
@@ -45,6 +46,11 @@ $(COBJS): %.o: %.c
 $(CPPOBJS): %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $(INCLUDES) $< -o $@
 
+install:
+	@echo "[Install]"
+	@cp btcmd /usr/local/bin
+	@chown root.root /usr/local/bin/btcmd
+	@chmod 4755 /usr/local/bin/btcmd
 
 clean:
 	rm -f $(OBJS) hidtest-hidraw libhidapi-hidraw.so ../hidtest/hidtest.o
