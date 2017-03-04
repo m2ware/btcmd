@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #  Need to run this with SUDO to work...
 PULSES=1
 HIDPATH="/dev/hidraw0"
@@ -6,59 +8,65 @@ stdbuf -oL btcmd --numeric $HIDPATH |
 while IFR= read -r VALUE
 do
 
+#if [ ! -z $VALUE ]
+#then
+#  echo "Lost bluetooth connection, terminating."
+#  exit 1
+#fi
+
 echo $VALUE
-CHAR=" "
+CHAR="nothing"
 
 # LEFT
 if [ $VALUE -eq 4 ]
 then
-#  let CHAR="a"
+  CHAR="a"
   echo "1"
 fi
 # RIGHT
 if [ $VALUE -eq 7 ]
 then
-#  let CHAR="d"
+  CHAR="d"
   echo "1"
 fi
 # UP
 if [ $VALUE -eq 26 ]
 then
-#  let CHAR="w"
+  CHAR="w"
   echo "1"
 fi
 # DOWN
 if [ $VALUE -eq 27 ]
 then
-#  let CHAR="x"
+  CHAR="x"
   echo "1"
 fi
 
 # Start -> go to neutral
 if [ $VALUE -eq 24 ]
 then
-#  let CHAR="s"
+  CHAR="s"
   echo "1"
 fi
 
 # LeftBumper -> Go full
 if [ $VALUE -eq 11 ]
 then
-#  let CHAR="q"
+  CHAR="q"
   echo "1"
 fi
 
 # RightBumper -> Go full
 if [ $VALUE -eq 13 ]
 then
-#  let CHAR="e"
+  CHAR="e"
   echo "1"
 fi
 
 #BtmRight btn -> do a dance
 if [ $VALUE -eq 15 ]
 then
-#  let CHAR="0"
+  CHAR="0"
   echo "1"
 fi
 
@@ -82,6 +90,9 @@ then
   echo Speed=$PULSES
 fi
 
-./motorControl.sh $CHAR $PULSES
+# I don't know why I have to specifically invoke the bash shell here...
+# but it appears to invoke via /bin/sh if I don't do this resulting in eval
+# errors
+/bin/bash ./motorControl.sh $CHAR $PULSES
 
 done

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #  Need to run this with SUDO to work...
 PULSES=1
 

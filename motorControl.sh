@@ -1,7 +1,10 @@
-VALUE=$1
+#!/bin/bash
+
+COMMAND=$1
 PULSES=$2
-PIN1=20
-PIN2=21
+DEBUG=$3
+LRPIN=20
+UDPIN=21
 UP=4
 DOWN=22
 LEFT=23
@@ -9,87 +12,95 @@ RIGHT=8
 LRNEUTRAL=15
 UDNEUTRAL=13
 
+if [ ! -z $DEBUG ]; then
+  if [ $DEBUG -eq 1 ]
+  then
+    echo "Command = $COMMAND"
+    echo "Pulses  = $PULSES"
+  fi
+fi
+
 # LEFT
-if [ $VALUE == "a" ]
+if [ $COMMAND == "a" ]
 then
-  gpio_pwm $PIN1 10000 $PULSES $LEFT &
+  gpio_pwm $LRPIN 10000 $PULSES $LEFT &
 fi
 # RIGHT
-if [ $VALUE == "d" ]
+if [ $COMMAND == "d" ]
 then
-  gpio_pwm $PIN1 10000 $PULSES $RIGHT &
+  gpio_pwm $LRPIN 10000 $PULSES $RIGHT &
 fi
 # UP
-if [ $VALUE == "w" ]
+if [ $COMMAND == "w" ]
 then
-  gpio_pwm $PIN2 10000 $PULSES $UP &
+  gpio_pwm $UDPIN 10000 $PULSES $UP &
 fi
 # DOWN
-if [ $VALUE == "x" ]
+if [ $COMMAND == "x" ]
 then
-  gpio_pwm $PIN2 10000 $PULSES $DOWN &
+  gpio_pwm $UDPIN 10000 $PULSES $DOWN &
 fi
 
 # Start -> go to neutral
-if [ $VALUE == "s" ]
+if [ $COMMAND == "s" ]
 then
-  gpio_pwm $PIN1 10000 25 $LRNEUTRAL &
-  gpio_pwm $PIN2 10000 25 $UDNEUTRAL &
+  gpio_pwm $LRPIN 10000 25 $LRNEUTRAL &
+  gpio_pwm $UDPIN 10000 25 $UDNEUTRAL &
 fi
 
 # LeftBumper -> Up-Left
-if [ $VALUE == "q" ]
+if [ $COMMAND == "q" ]
 then
-  gpio_pwm $PIN1 10000 35 $LEFT &
-  gpio_pwm $PIN2 10000 35 $UP &
+  gpio_pwm $LRPIN 10000 35 $LEFT &
+  gpio_pwm $UDPIN 10000 35 $UP &
 fi
 
 # RightBumper -> Up-Right
-if [ $VALUE == "e" ]
+if [ $COMMAND == "e" ]
 then
-  gpio_pwm $PIN1 10000 35 $RIGHT &
-  gpio_pwm $PIN2 10000 35 $UP &
+  gpio_pwm $LRPIN 10000 35 $RIGHT &
+  gpio_pwm $UDPIN 10000 35 $UP &
 fi
 
 # -> Down-Left
-if [ $VALUE == "z" ]
+if [ $COMMAND == "z" ]
 then
-  gpio_pwm $PIN1 10000 35 $LEFT &
-  gpio_pwm $PIN2 10000 35 $DOWN &
+  gpio_pwm $LRPIN 10000 35 $LEFT &
+  gpio_pwm $UDPIN 10000 35 $DOWN &
 fi
 
 # -> Down-Right
-if [ $VALUE == "c" ]
+if [ $COMMAND == "c" ]
 then
-  gpio_pwm $PIN1 10000 35 $RIGHT &
-  gpio_pwm $PIN2 10000 35 $DOWN &
+  gpio_pwm $LRPIN 10000 35 $RIGHT &
+  gpio_pwm $UDPIN 10000 35 $DOWN &
 fi
 
 #BtmRight btn -> do a dance
-if [ $VALUE == "0" ]
+if [ $COMMAND == "0" ]
 then
-  gpio_pwm $PIN1 10000 15 15 &
-  gpio_pwm $PIN2 10000 15 14
-  gpio_pwm $PIN1 10000 25 19 &
-  gpio_pwm $PIN2 10000 25 19
-  gpio_pwm $PIN1 10000 25 10 &
-  gpio_pwm $PIN2 10000 25 10
-  gpio_pwm $PIN1 10000 25 15 &
-  gpio_pwm $PIN2 10000 25 14
-  gpio_pwm $PIN1 10000 25 10 &
-  gpio_pwm $PIN2 10000 25 19
-  gpio_pwm $PIN1 10000 25 19 &
-  gpio_pwm $PIN2 10000 25 10
-  gpio_pwm $PIN1 10000 25 10 &
-  gpio_pwm $PIN2 10000 25 10
-  gpio_pwm $PIN1 10000 25 19 &
-  gpio_pwm $PIN2 10000 25 10
-  gpio_pwm $PIN1 10000 25 19 &
-  gpio_pwm $PIN2 10000 25 19
-  gpio_pwm $PIN1 10000 25 10 &
-  gpio_pwm $PIN2 10000 25 19
-  gpio_pwm $PIN1 10000 20 15 &
-  gpio_pwm $PIN2 10000 20 14
+  gpio_pwm $LRPIN 10000 15 15 &
+  gpio_pwm $UDPIN 10000 15 14
+  gpio_pwm $LRPIN 10000 25 19 &
+  gpio_pwm $UDPIN 10000 25 19
+  gpio_pwm $LRPIN 10000 25 10 &
+  gpio_pwm $UDPIN 10000 25 10
+  gpio_pwm $LRPIN 10000 25 15 &
+  gpio_pwm $UDPIN 10000 25 14
+  gpio_pwm $LRPIN 10000 25 10 &
+  gpio_pwm $UDPIN 10000 25 19
+  gpio_pwm $LRPIN 10000 25 19 &
+  gpio_pwm $UDPIN 10000 25 10
+  gpio_pwm $LRPIN 10000 25 10 &
+  gpio_pwm $UDPIN 10000 25 10
+  gpio_pwm $LRPIN 10000 25 19 &
+  gpio_pwm $UDPIN 10000 25 10
+  gpio_pwm $LRPIN 10000 25 19 &
+  gpio_pwm $UDPIN 10000 25 19
+  gpio_pwm $LRPIN 10000 25 10 &
+  gpio_pwm $UDPIN 10000 25 19
+  gpio_pwm $LRPIN 10000 20 15 &
+  gpio_pwm $UDPIN 10000 20 14
 fi
 
 
